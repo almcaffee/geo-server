@@ -1,0 +1,291 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Open Source Timesheet API",
+    "version": "1.0.0",
+    "title": "Devsthetic Timesheet",
+    "termsOfService": "http://devsthetic.com/terms.cfm",
+    "contact": {
+      "email": "info@devsthetic.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "time.devsthetic.com",
+  "basePath": "/docs",
+  "tags": [
+    {
+      "name": "login",
+      "description": "Get user profile on login"
+    },
+    {
+      "name": "profile",
+      "description": "Get user profile by admin/supervisor"
+    },
+    {
+      "name": "timesheet",
+      "description": "Timesheet details"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/login/user/{userId}/password/{password}": {
+      "get": {
+        "tags": [
+          "login"
+        ],
+        "summary": "Get profile by login criteria",
+        "operationId": "login",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "User Id for timesheet user",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "path",
+            "description": "Password for user",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "schema": {
+              "$ref": "#/definitions/Profile"
+            }
+          },
+          "400": {
+            "description": "Bad user id and password combination",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/profile/{userId}": {
+      "get": {
+        "tags": [
+          "profile"
+        ],
+        "summary": "Get profile by login criteria",
+        "operationId": "getProfile",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "User Id for timesheet user",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "schema": {
+              "$ref": "#/definitions/Profile"
+            }
+          },
+          "400": {
+            "description": "Bad user id and password combination",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Day": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "day": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "moment": {
+          "type": "object"
+        },
+        "month": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of weekday"
+        },
+        "time": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "year": {
+          "type": "number",
+          "format": "int32"
+        }
+      }
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "Error message returned from API"
+        },
+        "required": {
+          "type": "array",
+          "description": "Required fields/variables if any",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "$ref": "#/definitions/Error"
+        }
+      }
+    },
+    "Month": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the month"
+        },
+        "days": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Day"
+          }
+        },
+        "year": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "Profile": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "departmentId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "email": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "gender": {
+          "type": "string",
+          "enum": [
+            "m",
+            "f"
+          ]
+        },
+        "hireDate": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "locationId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "password": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "personalComments": {
+          "type": "string",
+          "description": "Profile description of user"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "admin",
+              "supervisor",
+              "user"
+            ]
+          }
+        },
+        "salary": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "supervisorId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "userName": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about Devsthetic",
+    "url": "http://devsthetic.com"
+  }
+}
