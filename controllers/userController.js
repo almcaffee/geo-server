@@ -1,6 +1,8 @@
 var userController = function () {
     var userModel = require('../models/userModel')();
     var path = require('path');
+    var network = require('../json/network.json');
+    var virginia = require('../json/virginia.json');
 
     var test = function (req, res) {
       userModel.test(function (err, rows) {
@@ -16,8 +18,18 @@ var userController = function () {
       });
     };
 
+    var getNetork = function (req, res) {
+      res.status(200).send(network);
+    };
+
+    var getVirginia = function (req, res) {
+      res.status(200).send(virginia);
+    };
+
     return {
-        test: test
+        test: test,
+        getNetwork: getNetork,
+        getVirginia: getVirginia
     };
 };
 

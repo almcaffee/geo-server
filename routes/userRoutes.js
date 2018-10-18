@@ -5,6 +5,8 @@ var routes = function () {
 
     // Get
     userRouter.get('/test', userController.test);
+    userRouter.get('/network', userController.getNetwork);
+    userRouter.get('/virginia', userController.getVirginia);
 
     return userRouter;
 };
