@@ -5,7 +5,11 @@ var bodyParser = require('body-parser');
 var mysql = require('mysql');
 var app = express();
 var port = process.env.PORT;
-var path = require('path')
+var path = require('path');
+
+/* Test DB Connection */
+const getConnection = require('./config/connection');
+console.log(getConnection);
 
 /* Swagger API Docs */
 var swaggerUi = require('swagger-ui-express');

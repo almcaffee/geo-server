@@ -5,7 +5,7 @@ var commonModel = function () {
             if (err) {
                 callback({code: 500, message: "There was an error while connecting to the database", err: err});
             } else {
-              var select = "SELECT COUNT(*) AS data FROM employees";
+              var select = "SELECT COUNT(*) AS data FROM user";
               connection.query(select, function (err, rows) {
                   connection.release();
                   if (err) {
