@@ -91,7 +91,7 @@ var userModel = function () {
             insert += " NOW())";
             console.log(insert);
             connection.query(insert, function (err, rows) {
-              /* DO NOT realease() connection - LAST_INSERT_ID is connection specific */
+            connection.release();
               if (err) {
                 callback({ code: 500, err: err });
               } else {
@@ -122,7 +122,7 @@ var userModel = function () {
             insert += " NOW())";
             console.log(insert);
             connection.query(insert, function (err, rows) {
-              /* DO NOT realease() connection - LAST_INSERT_ID is connection specific */
+            connection.release();
               if (err) {
                 callback({ code: 500, err: err });
               } else {
