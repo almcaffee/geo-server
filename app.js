@@ -8,8 +8,8 @@ var port = process.env.PORT;
 var path = require('path');
 
 /* Test DB Connection */
-const getConnection = require('./config/connection');
-console.log(getConnection);
+// const getConnection = require('./config/connection');
+// console.log(getConnection);
 
 /* Swagger API Docs */
 var swaggerUi = require('swagger-ui-express');
@@ -30,8 +30,12 @@ app.use(function (req, res, next) {
 
 /* Non server routes for both apps and swagger */
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-app.use('/admin', express.static('static/public/admin'));
-app.use('/dashboard', express.static('static/public/dashboard'));
+app.use('/admin', express.static('admin'));
+app.use('/dashboard', express.static('dashboard'));
+
+/* Unable to get node running in existing instance using seperate deploy folders*/
+// app.use('/admin', express.static('static/public/admin'));
+// app.use('/dashboard', express.static('static/public/dashboard'));
 
 /* Define routers for API */
 var adminRouter = require('./routes/adminRoutes')();
@@ -50,9 +54,8 @@ app.use(function (err, req, res, next) {
   }
 });
 
-app.get('*', function (req, res) {
-    res.status(500).json({success: false, message: 'Incorrect server path'});
-});
+app.use(express.static('assets'));
+app.use('*', express.static('wwwroot'));
 
 process.on('warning', (warning) => {
   console.warn(warning.name);    // Print the warning name

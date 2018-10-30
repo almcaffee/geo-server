@@ -1,13 +1,15 @@
 var mysql = require('mysql');
 var maxListen = require('events').EventEmitter.prototype._maxListeners = 0;
+var mysqlConfig = require('./config').mysql;
+
 var pool = mysql.createPool({
-    connectionLimit : 25,
-    host            : 'localhost',
-    user            : 'gps',
-    password        : '$enCryption',
-    database        : 'faciallock',
-    acquireTimeout: 1000,
-    debug: false
+  connectionLimit: mysqlConfig.connectionLimit,
+  host: mysqlConfig.host,
+  user: mysqlConfig.user,
+  password: mysqlConfig.password,
+  database: mysqlConfig.database,
+  acquireTimeout: mysqlConfig.acquireTimeout,
+  debug: mysqlConfig.debug
 });
 
 var getConnection = function (callback) {
@@ -18,7 +20,6 @@ var getConnection = function (callback) {
          * error then do the same.
          */
         if (err) {
-            console.log('DB connection failure');
             callback({code: 500, message: "Error in connection database"});
             return;
         } else {

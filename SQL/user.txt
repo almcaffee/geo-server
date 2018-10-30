@@ -1,0 +1,5 @@
+SELECT u.userId, CONCAT(u.userFirstName, ' ', u.userLastName) as name, u.userFirstName, u.userLastName, u.userImageUrl as photo, a.addressStreetAddress1, a.addressStreetAddress2, a.addressCity, a.addressState, a.addressZip, a.addressCountry, g.groupName, g.groupId, g.organizationId, o.organizationName FROM user u
+JOIN address a ON u.userId = a.userId
+JOIN groupuser gu ON gu.userId = a.userId
+JOIN faciallock.group g ON g.groupId = gu.userGroupId
+JOIN organization o ON o.organizationId = g.organizationId

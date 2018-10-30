@@ -4,6 +4,34 @@ var userController = function () {
     var network = require('../json/network.json');
     var virginia = require('../json/virginia.json');
 
+    var organizationRequiredFields = {
+      name: true,
+      address1: true,
+      city: true,
+      state: true,
+      zip: true,
+      phone: true,
+      email: true
+    };
+
+    var userRequiredFields = {
+      firstName: true,
+      lastName: true,
+      address1: true,
+      city: true,
+      state: true,
+      zip: true,
+      email: true
+    };
+
+    var checkRequiredFields = function(object, required) {
+      var missingFields = [];
+      Object.keys(object).forEach(key=> {
+        if(required[key] && !object[key]) missingFields.push(key);
+      });
+      return { valid: missingFields.length ? false : true, fields: missingFields };
+    }
+
     var test = function (req, res) {
       userModel.test(function (err, rows) {
           if (!err) {
@@ -18,38 +46,13 @@ var userController = function () {
       });
     };
 
-    var getNetork = function (req, res) {
-      res.status(200).send(network);
-    };
-
-    var getUserById = function (req, res) {
-      userModel.getUserById(req.params.id, function (err, rows) {
-          if (!err) {
-              console.log(rows)
-              if(rows.length > 0) {
-                res.status(200).json(rows);
-              } else {
-                res.status(404).json({ error: { message: 'No Data'} });
-              }
-          } else {
-              res.status(500).json({ error: { message: err.error} });
-          }
-      });
-    };
-
-    var getVirginia = function (req, res) {
-      res.status(200).send(virginia);
-    };
-
-    var setUserLocation = function (req, res) {
-      if(!req.params.id) {
+    var addNetworkById = function (req, res) {
+      if(!req.body.id) {
         res.status(400).json({ error: { message: 'User Id required'} });
-      } else if(!req.body.lat) {
-        res.status(400).json({ error: { message: 'Latitude required'} });
-      } else if(!req.body.lng) {
-        res.status(400).json({ error: { message: 'Longitude required'} });
+      } else if(!req.body.groupId && !req.body.organizationId && !req.body.parentId && !req.body.childId) {
+        res.status(400).json({ error: { message: 'A secondary column value is required', required: ['groupId', 'childId', 'organizationId', 'parentId'], optional: ['groupId', 'childId', 'organizationId', 'parentId']}});
       } else {
-        userModel.setUserLocation(req.params.id, req.body.lat, req.body.lng, function (err, rows) {
+        userModel.addNetworkById(req.body, function (err, rows) {
           if (!err) {
             if(rows.length > 0) {
               res.status(200).json(rows);
@@ -63,35 +66,275 @@ var userController = function () {
       }
     };
 
-    var updateUserLocation = function (req, res) {
-      if(!req.params.id) {
-        res.status(400).json({ error: { message: 'User Id required'} });
-      } else if(!req.body.lat) {
-        res.status(400).json({ error: { message: 'Latitude required'} });
-      } else if(!req.body.lng) {
-        res.status(400).json({ error: { message: 'Longitude required'} });
+    var createGroup = function (req, res) {
+      if(!req.body.name) {
+        res.status(400).json({ error: { message: 'Group name required', required: ['name']} });
       } else {
-        userModel.updateUserLocation(req.params.id, req.body.lat, req.body.lng, function (err, rows) {
-            if (!err) {
-              if(rows.length > 0) {
-                res.status(200).json(rows);
-              } else {
-                res.status(404).json({ error: { message: 'No Data'} });
-              }
+        userModel.createGroup(req.body, function (err, rows) {
+          if (!err) {
+            var group = Object.assign({}, req.body, {id: rows.insertId});
+            res.status(200).json(group);
+          } else {
+            res.status(error.code).json({ error: { message: err.error} });
+          }
+        });
+      }
+    };
+
+    var createOrganization = function (req, res) {
+      var test = checkRequiredFields(req.body, organizationRequiredFields);
+      if(!test.valid) {
+        res.status(400).json({ error: { message: 'Missing fields required', required: test.fields} });
+      } else {
+        userModel.createOrganization(req.body, function (err, rows) {
+          if (!err) {
+            var org = Object.assign({}, req.body, {id: rows.insertId});
+            res.status(200).json(org);
+          } else {
+            res.status(error.code).json({ error: { message: err.error} });
+          }
+        });
+      }
+    };
+
+    var createUser = function (req, res) {
+      var test = checkRequiredFields(req.body, userRequiredFields);
+      if(!test.valid) {
+        res.status(400).json({ error: { message: 'Missing fields required', required: test.fields} });
+      } else {
+        userModel.createUser(req.body, function (err, rows) {
+          if (!err) {
+            var user = Object.assign({}, req.body, {id: rows.insertId});
+            res.status(200).json(user);
+          } else {
+            res.status(err.code).json({ error: err });
+          }
+        });
+      }
+    };
+
+    var getGroupById = function (req, res) {
+      if(!req.params.id) {
+        res.status(400).json({ error: { message: 'Group Id required'}, required: ['id'] });
+      } else {
+        userModel.getGroupById(req.params.id, function (err, rows) {
+          if (!err) {
+            if(rows.length > 0) {
+              res.status(200).json(rows);
             } else {
-               res.status(error.code).json({ error: { message: err.error} });
+              res.status(404).json({ error: { message: 'No Data'} });
             }
+          } else {
+             res.status(error.code).json({ error: err });
+          }
+        });
+      }
+    };
+
+    var getGroups = function (req, res) {
+      userModel.getGroups(function (err, rows) {
+        if (!err) {
+          if(rows.length > 0) {
+            res.status(200).json(rows);
+          } else {
+            res.status(404).json({ error: { message: 'No Data'} });
+          }
+        } else {
+           res.status(error.code).json({ error: { message: err.error} });
+        }
+      });
+    };
+
+    var getNetork = function (req, res) {
+      res.status(200).send(network);
+    };
+
+    var getNetworkByGroupId = function (req, res) {
+      if(!req.params.groupId) {
+        res.status(400).json({ error: { message: 'Group Id required'}, required: ['groupId'] });
+      } else {
+        userModel.getNetworkByGroupId(req.params.groupId, function (err, rows) {
+          if (!err) {
+            if(rows.length > 0) {
+              res.status(200).json(rows);
+            } else {
+              res.status(404).json({ error: { message: 'No Data'} });
+            }
+          } else {
+             res.status(error.code).json({ error: { message: err.error} });
+          }
+        });
+      }
+    };
+
+    var getNetworkByOrganizationId = function (req, res) {
+      if(!req.params.organizationId) {
+        res.status(400).json({ error: { message: 'Organization Id required'}, required: ['organizationId'] });
+      } else {
+        userModel.getNetworkByOrganizationId(req.params.organizationId, function (err, rows) {
+          if (!err) {
+            if(rows.length > 0) {
+              res.status(200).json(rows);
+            } else {
+              res.status(404).json({ error: { message: 'No Data'} });
+            }
+          } else {
+             res.status(error.code).json({ error: { message: err.error} });
+          }
+        });
+      }
+    };
+
+    var getNetworkByUserId = function (req, res) {
+      if(!req.params.userId) {
+        res.status(400).json({ error: { message: 'User Id required'}, required: ['userId'] });
+      } else {
+        userModel.getNetworkByUserId(req.params.userId, function (err, rows) {
+          if (!err) {
+            if(rows.length > 0) {
+              res.status(200).json(rows);
+            } else {
+              res.status(404).json({ error: { message: 'No Data'} });
+            }
+          } else {
+             res.status(error.code).json({ error: { message: err.error} });
+          }
+        });
+      }
+    };
+
+    var getOrganizationById = function (req, res) {
+      if(!req.params.id) {
+        res.status(400).json({ error: { message: 'Organization Id required'}, required: ['id'] });
+      } else {
+        userModel.getOrganizationById(req.params.id, function (err, rows) {
+          if (!err) {
+            if(rows.length > 0) {
+              res.status(200).json(rows);
+            } else {
+              res.status(404).json({ error: { message: 'No Data'} });
+            }
+          } else {
+             res.status(error.code).json({ error: { message: err.error} });
+          }
+        });
+      }
+    };
+
+    var getOrganizations = function (req, res) {
+      userModel.getOrganizations(function (err, rows) {
+        if (!err) {
+          if(rows.length > 0) {
+            res.status(200).json(rows);
+          } else {
+            res.status(404).json({ error: { message: 'No Data'} });
+          }
+        } else {
+           res.status(error.code).json({ error: { message: err.error} });
+        }
+      });
+    };
+
+    var getUserById = function (req, res) {
+      if(!req.params.id) {
+        res.status(400).json({ error: { message: 'User Id required', required: ['userId']}});
+      } else {
+        userModel.getUserById(req.params.id, function (err, rows) {
+            if (!err) {
+                console.log(rows)
+                if(rows.length > 0) {
+                  res.status(200).json(rows);
+                } else {
+                  res.status(404).json({ error: { message: 'No Data'} });
+                }
+            } else {
+                res.status(500).json({ error: { message: err.error} });
+            }
+        });
+      }
+    };
+
+    var getUsers = function (req, res) {
+      userModel.getUsers(function (err, rows) {
+        if (!err) {
+          if(rows.length > 0) {
+            res.status(200).json(rows);
+          } else {
+            res.status(404).json({ error: { message: 'No Data'} });
+          }
+        } else {
+           res.status(error.code).json({ error: { message: err.error} });
+        }
+      });
+    };
+
+    var getVirginia = function (req, res) {
+      res.status(200).send(virginia);
+    };
+
+    var setUserLocation = function (req, res) {
+      if(!req.body.id) {
+        res.status(400).json({ error: { message: 'User Id required', required: ['id']}});
+      } else if(!req.body.lat) {
+        res.status(400).json({ error: { message: 'Latitude required', required: ['lat']} });
+      } else if(!req.body.lng) {
+        res.status(400).json({ error: { message: 'Longitude required', required: ['lng']} });
+      } else {
+        userModel.setUserLocation(req.body.id, req.body.lat, req.body.lng, function (err, rows) {
+          if (!err) {
+            if(rows.length > 0) {
+              res.status(200).json(rows);
+            } else {
+              res.status(404).json({ error: { message: 'No Data'} });
+            }
+          } else {
+             res.status(error.code).json({ error: { message: err.error} });
+          }
+        });
+      }
+    };
+
+    var setOrganizationLocation = function (req, res) {
+      if(!req.body.id) {
+        res.status(400).json({ error: { message: 'Organization Id required', required: ['id']}});
+      } else if(!req.body.lat) {
+        res.status(400).json({ error: { message: 'Latitude required', required: ['lat']} });
+      } else if(!req.body.lng) {
+        res.status(400).json({ error: { message: 'Longitude required', required: ['lng']} });
+      } else {
+        userModel.setUserLocation(req.body.id, req.body.lat, req.body.lng, function (err, rows) {
+          if (!err) {
+            if(rows.length > 0) {
+              res.status(200).json(rows);
+            } else {
+              res.status(404).json({ error: { message: 'No Data'} });
+            }
+          } else {
+             res.status(error.code).json({ error: { message: err.error} });
+          }
         });
       }
     };
 
     return {
         test: test,
+        addNetworkById: addNetworkById,
+        createGroup: createGroup,
+        createOrganization: createOrganization,
+        createUser: createUser,
+        getGroupById: getGroupById,
+        getGroups: getGroups,
         getNetwork: getNetork,
+        getNetworkByGroupId: getNetworkByGroupId,
+        getNetworkByOrganizationId: getNetworkByOrganizationId,
+        getNetworkByUserId: getNetworkByUserId,
+        getOrganizationById: getOrganizationById,
+        getOrganizations: getOrganizations,
         getUserById: getUserById,
+        getUsers: getUsers,
         getVirginia: getVirginia,
-        setUserLocation: setUserLocation,
-        updateUserLocation: updateUserLocation
+        setOrganizationLocation: setOrganizationLocation,
+        setUserLocation: setUserLocation
     };
 };
 
