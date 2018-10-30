@@ -83,12 +83,12 @@ var userModel = function () {
               insert+= "`"+key+"`";
               if(i<keys.length - 1) insert+= ",";
             });
-            insert += ") VALUES (";
+            insert += "`createDate`) VALUES (";
             keys.forEach((k, i)=> {
               insert+= connection.escape(user[k]);
               if(i<keys.length - 1) insert+= ",";
             });
-            insert += ")";
+            insert += " NOW())";
             console.log(insert);
             connection.query(insert, function (err, rows) {
               /* DO NOT realease() connection - LAST_INSERT_ID is connection specific */
@@ -114,12 +114,12 @@ var userModel = function () {
               insert+= "`"+k+"`";
               if(i<keys.length - 1) insert+= ",";
             });
-            insert += ") VALUES (";
+            insert += "`createDate`) VALUES (";
             keys.forEach((k, i)=> {
               insert+= connection.escape(user[k]);
               if(i<keys.length - 1) insert+= ",";
             });
-            insert += ")";
+            insert += " NOW())";
             console.log(insert);
             connection.query(insert, function (err, rows) {
               /* DO NOT realease() connection - LAST_INSERT_ID is connection specific */
@@ -146,12 +146,12 @@ var userModel = function () {
             insert+= "`"+k+"`";
             if(i<keys.length - 1) insert+= ",";
           });
-          insert += ") VALUES (";
+          insert += "`createDate`) VALUES (";
           keys.forEach((k, i)=> {
             insert+= connection.escape(user[k]);
             if(i<keys.length - 1) insert+= ",";
           });
-          insert += ")";
+          insert += " NOW())";
           console.log(insert);
           connection.query(insert, function (err, rows, user) {
             connection.release();
@@ -352,7 +352,7 @@ var userModel = function () {
           if (err) {
               callback({code: 500, message: "There was an error while connecting to the database", err: err});
           } else {
-            var update = "UPDATE `user` SET `lat` = "+connection.escape(lat)+", `lng` = "+connection.escape(lng)+" WHERE id = "+connection.escape(id);
+            var update = "UPDATE `user` SET `lat` = "+connection.escape(lat)+", `lng` = "+connection.escape(lng)+" `updateDate` = NOW() WHERE id = "+connection.escape(id);
             connection.query(update, function (err, rows) {
                 connection.release();
                 if (err) {
@@ -371,7 +371,7 @@ var userModel = function () {
           if (err) {
               callback({code: 500, message: "There was an error while connecting to the database", err: err});
           } else {
-            var update = "UPDATE `organization` SET `lat` = "+connection.escape(lat)+", `lng` = "+connection.escape(lng)+" WHERE id = "+connection.escape(id);
+            var update = "UPDATE `organization` SET `lat` = "+connection.escape(lat)+", `lng` = "+connection.escape(lng)+" `updateDate` = NOW() WHERE id = "+connection.escape(id);
             connection.query(update, function (err, rows) {
                 connection.release();
                 if (err) {
