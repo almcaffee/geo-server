@@ -111,13 +111,14 @@ var userModel = function () {
             var keys = Object.keys(organization);
             var insert = "INSERT INTO `organization` (";
             keys.forEach((k, i)=> {
-              insert+= "`"+k+"`";
-              if(i<keys.length - 1) insert+= ",";
+              insert+= "`"+k+"`,";
+              // if(i<keys.length - 1) insert+= ",";
             });
             insert += "`createDate`) VALUES (";
             keys.forEach((k, i)=> {
-              insert+= connection.escape(user[k]);
-              if(i<keys.length - 1) insert+= ",";
+              insert+= connection.escape(organization[k]);
+              insert+= ",";
+              // if(i<keys.length - 1) insert+= ",";
             });
             insert += " NOW())";
             console.log(insert);
@@ -143,13 +144,14 @@ var userModel = function () {
           var keys = Object.keys(user);
           var insert = "INSERT INTO `user` (";
           keys.forEach((k, i)=> {
-            insert+= "`"+k+"`";
-            if(i<keys.length - 1) insert+= ",";
+            insert+= "`"+k+"`,";
+            // if(i<keys.length - 1) insert+= ",";
           });
           insert += "`createDate`) VALUES (";
           keys.forEach((k, i)=> {
             insert+= connection.escape(user[k]);
-            if(i<keys.length - 1) insert+= ",";
+            insert+= ",";
+            // if(i<keys.length - 1) insert+= ",";
           });
           insert += " NOW())";
           console.log(insert);
@@ -286,7 +288,7 @@ var userModel = function () {
       getConnection(getOrganization);
     };
 
-    var getOrganizations =  function(id, callback) {
+    var getOrganizations =  function(callback) {
       function getAllOrgs(err, connection) {
           if (err) {
               callback({code: 500, message: "There was an error while connecting to the database", err: err});

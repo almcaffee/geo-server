@@ -41,7 +41,7 @@ var userController = function () {
                res.status(404).json({ error: { message: 'No Data'} });
              }
           } else {
-              res.status(500).json({ error: { message: err.error} });
+              res.status(500).json({ error: err });
           }
       });
     };
@@ -60,7 +60,7 @@ var userController = function () {
               res.status(404).json({ error: { message: 'No Data'} });
             }
           } else {
-             res.status(error.code).json({ error: { message: err.error} });
+             res.status(err.code).json({ error: err });
           }
         });
       }
@@ -75,7 +75,7 @@ var userController = function () {
             var group = Object.assign({}, req.body, {id: rows.insertId});
             res.status(200).json(group);
           } else {
-            res.status(error.code).json({ error: { message: err.error} });
+            res.status(err.code).json({ error: err });
           }
         });
       }
@@ -91,7 +91,7 @@ var userController = function () {
             var org = Object.assign({}, req.body, {id: rows.insertId});
             res.status(200).json(org);
           } else {
-            res.status(error.code).json({ error: { message: err.error} });
+            res.status(err.code).json({ error: err });
           }
         });
       }
@@ -125,7 +125,7 @@ var userController = function () {
               res.status(404).json({ error: { message: 'No Data'} });
             }
           } else {
-             res.status(error.code).json({ error: err });
+             res.status(err.code).json({ error: err });
           }
         });
       }
@@ -140,7 +140,7 @@ var userController = function () {
             res.status(404).json({ error: { message: 'No Data'} });
           }
         } else {
-           res.status(error.code).json({ error: { message: err.error} });
+           res.status(err.code).json({ error: err });
         }
       });
     };
@@ -161,7 +161,7 @@ var userController = function () {
               res.status(404).json({ error: { message: 'No Data'} });
             }
           } else {
-             res.status(error.code).json({ error: { message: err.error} });
+             res.status(err.code).json({ error: err });
           }
         });
       }
@@ -179,7 +179,7 @@ var userController = function () {
               res.status(404).json({ error: { message: 'No Data'} });
             }
           } else {
-             res.status(error.code).json({ error: { message: err.error} });
+             res.status(err.code).json({ error: err });
           }
         });
       }
@@ -197,7 +197,7 @@ var userController = function () {
               res.status(404).json({ error: { message: 'No Data'} });
             }
           } else {
-             res.status(error.code).json({ error: { message: err.error} });
+             res.status(err.code).json({ error: err });
           }
         });
       }
@@ -215,7 +215,7 @@ var userController = function () {
               res.status(404).json({ error: { message: 'No Data'} });
             }
           } else {
-             res.status(error.code).json({ error: { message: err.error} });
+             res.status(err.code).json({ error: err });
           }
         });
       }
@@ -230,7 +230,7 @@ var userController = function () {
             res.status(404).json({ error: { message: 'No Data'} });
           }
         } else {
-           res.status(error.code).json({ error: { message: err.error} });
+           res.status(err.code).json({ error: err });
         }
       });
     };
@@ -248,7 +248,7 @@ var userController = function () {
                   res.status(404).json({ error: { message: 'No Data'} });
                 }
             } else {
-                res.status(500).json({ error: { message: err.error} });
+                res.status(500).json({ error: err });
             }
         });
       }
@@ -263,7 +263,7 @@ var userController = function () {
             res.status(404).json({ error: { message: 'No Data'} });
           }
         } else {
-           res.status(error.code).json({ error: { message: err.error} });
+           res.status(err.code).json({ error: err });
         }
       });
     };
@@ -288,7 +288,7 @@ var userController = function () {
               res.status(404).json({ error: { message: 'No Data'} });
             }
           } else {
-             res.status(error.code).json({ error: { message: err.error} });
+             res.status(err.code).json({ error: err });
           }
         });
       }
@@ -310,7 +310,7 @@ var userController = function () {
               res.status(404).json({ error: { message: 'No Data'} });
             }
           } else {
-             res.status(error.code).json({ error: { message: err.error} });
+             res.status(err.code).json({ error: err });
           }
         });
       }
