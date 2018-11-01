@@ -4,7 +4,7 @@ var pm2 = require('pm2');
 
 // Execute 'gulp' command
 gulp.task('default', function () {
-    if (process.env.MODE === 'production') {
+    if (process.env.NODE_ENV === 'production') {
         console.log(process.env)
         // Runs in production mode if the environment variable mode is set to production
         pm2.connect(function (err) {
@@ -21,7 +21,7 @@ gulp.task('default', function () {
                 output: './pm2/logs/ramidx4-out.log',
                 error: './pm2/logs/ramidx4-error.log',
                 env: {
-                    PORT: 80
+                    PORT: process.env.PORT || 80
                 }
             }, function (err) {
                 if (err) {
