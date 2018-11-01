@@ -15,13 +15,12 @@ gulp.task('default', function () {
             pm2.streamLogs('all', 0);
 
             pm2.start({
-                name: 'ramidx4',
+                name: 'GeoServer',
                 script: 'app.js',
                 output: './pm2/logs/ramidx4-out.log',
                 error: './pm2/logs/ramidx4-error.log',
                 env: {
-                    PORT: 80
-                    // PORT: process.env.PORT || 8000
+                    PORT: process.env.PORT || 8000
                 }
             }, function (err) {
                 if (err) {

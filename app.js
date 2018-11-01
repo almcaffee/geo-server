@@ -1,3 +1,4 @@
+require('dotenv').config();
 var express = require('express');
 var http = require('http');
 var router = express.Router();
@@ -11,6 +12,9 @@ var path = require('path');
 // const getConnection = require('./config/connection');
 // console.log(getConnection);
 
+console.log(process.env.NODE_ENV)
+console.log(process.env.MODE)
+console.log(process.env.PORT)
 /* Swagger API Docs */
 var swaggerUi = require('swagger-ui-express');
 var swaggerDocument = require('./swagger.json');
