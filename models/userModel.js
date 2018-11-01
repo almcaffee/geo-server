@@ -182,12 +182,33 @@ var userModel = function () {
                 if (err) {
                   callback({ code: 500, err: err });
                 } else {
-                  callback(null, rows);
+                  callback(null, rows[0]);
                 }
             });
           }
       }
       getConnection(getGroup);
+    };
+
+    var getGroupsByOrganizationId =  function(id, callback) {
+      function getGroups(err, connection) {
+          if (err) {
+              callback({code: 500, message: "There was an error while connecting to the database", err: err});
+          } else {
+            var select = "SELECT * FROM faciallock.group WHERE organizationId ="+connection.escape(id);
+            select += " ORDER BY id asc";
+            console.log(select);
+            connection.query(select, function (err, rows) {
+                connection.release();
+                if (err) {
+                  callback({ code: 500, err: err });
+                } else {
+                  callback(null, rows);
+                }
+            });
+          }
+      }
+      getConnection(getGroups);
     };
 
     var getGroups =  function(callback) {
@@ -224,7 +245,7 @@ var userModel = function () {
                 if (err) {
                   callback({ code: 500, err: err });
                 } else {
-                  callback(null, rows);
+                  callback(null, rows[0]);
                 }
             });
           }
@@ -245,7 +266,7 @@ var userModel = function () {
                 if (err) {
                   callback({ code: 500, err: err });
                 } else {
-                  callback(null, rows);
+                  callback(null, rows[0]);
                 }
             });
           }
@@ -266,7 +287,7 @@ var userModel = function () {
                 if (err) {
                   callback({ code: 500, err: err });
                 } else {
-                  callback(null, rows);
+                  callback(null, rows[0]);
                 }
             });
           }
@@ -286,7 +307,7 @@ var userModel = function () {
                 if (err) {
                   callback({ code: 500, err: err });
                 } else {
-                  callback(null, rows);
+                  callback(null, rows[0]);
                 }
             });
           }
@@ -320,9 +341,32 @@ var userModel = function () {
               callback({code: 500, message: "There was an error while connecting to the database", err: err});
           } else {
             var select = "SELECT u.*, IFNULL(g.displayName, g.name) AS groupName, g.id AS groupId, IFNULL(o.displayName, o.name) AS organizationName, o.id AS organizationId FROM user u";
-            select += "LEFT OUTER JOIN faciallock.group g ON g.id = u.groupId ";
-            select += "LEFT OUTER JOIN faciallock.organization o ON o.id = u.organizationId ";
-            select += "WHERE u.id ="+connection.escape(id);
+            select += " LEFT OUTER JOIN faciallock.group g ON g.id = u.groupId";
+            select += " LEFT OUTER JOIN faciallock.organization o ON o.id = u.organizationId";
+            select += " WHERE u.id ="+connection.escape(id);
+            console.log(select);
+            connection.query(select, function (err, rows) {
+                connection.release();
+                if (err) {
+                  callback({ code: 500, err: err });
+                } else {
+                  callback(null, rows[0]);
+                }
+            });
+          }
+      }
+      getConnection(getUser);
+    };
+
+    var getUsersByGroupId =  function(id, callback) {
+      function getUsers(err, connection) {
+          if (err) {
+              callback({code: 500, message: "There was an error while connecting to the database", err: err});
+          } else {
+            var select = "SELECT u.*, IFNULL(g.displayName, g.name) AS groupName, g.id AS groupId, IFNULL(o.displayName, o.name) AS organizationName, o.id AS organizationId FROM user u";
+            select += " LEFT OUTER JOIN faciallock.group g ON g.id = u.groupId";
+            select += " LEFT OUTER JOIN faciallock.organization o ON o.id = u.organizationId";
+            select += " WHERE u.groupId ="+connection.escape(id);
             console.log(select);
             connection.query(select, function (err, rows) {
                 connection.release();
@@ -334,7 +378,30 @@ var userModel = function () {
             });
           }
       }
-      getConnection(getUser);
+      getConnection(getUsers);
+    };
+
+    var getUsersByOrganizationId =  function(id, callback) {
+      function getUsers(err, connection) {
+          if (err) {
+              callback({code: 500, message: "There was an error while connecting to the database", err: err});
+          } else {
+            var select = "SELECT u.*, IFNULL(g.displayName, g.name) AS groupName, g.id AS groupId, IFNULL(o.displayName, o.name) AS organizationName, o.id AS organizationId FROM user u";
+            select += " LEFT OUTER JOIN faciallock.group g ON g.id = u.groupId";
+            select += " LEFT OUTER JOIN faciallock.organization o ON o.id = u.organizationId";
+            select += " WHERE u.organizationId ="+connection.escape(id);
+            console.log(select);
+            connection.query(select, function (err, rows) {
+                connection.release();
+                if (err) {
+                  callback({ code: 500, err: err });
+                } else {
+                  callback(null, rows);
+                }
+            });
+          }
+      }
+      getConnection(getUsers);
     };
 
     var getUsers =  function(callback) {
@@ -407,6 +474,7 @@ var userModel = function () {
         createUser: createUser,
         getGroupById: getGroupById,
         getGroups: getGroups,
+        getGroupsByOrganizationId: getGroupsByOrganizationId,
         getLastInsert: getLastInsert,
         getNetworkByGroupId: getNetworkByGroupId,
         getNetworkByOrganizationId: getNetworkByOrganizationId,
@@ -415,6 +483,8 @@ var userModel = function () {
         getOrganizations: getOrganizations,
         getUserById: getUserById,
         getUsers: getUsers,
+        getUsersByGroupId: getUsersByGroupId,
+        getUsersByOrganizationId: getUsersByOrganizationId,
         setOrganizationLocation: setOrganizationLocation,
         setUserLocation: setUserLocation
     };

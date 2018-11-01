@@ -48,9 +48,9 @@ var userController = function () {
 
     var addNetworkById = function (req, res) {
       if(!req.body.id) {
-        res.status(400).json({ error: { message: 'User Id required'} });
+        res.status(400).json({ message: 'User Id required'});
       } else if(!req.body.groupId && !req.body.organizationId && !req.body.parentId && !req.body.childId) {
-        res.status(400).json({ error: { message: 'A secondary column value is required', required: ['groupId', 'childId', 'organizationId', 'parentId'], optional: ['groupId', 'childId', 'organizationId', 'parentId']}});
+        res.status(400).json({ message: 'A secondary column value is required', required: ['groupId', 'childId', 'organizationId', 'parentId'], optional: ['groupId', 'childId', 'organizationId', 'parentId']});
       } else {
         userModel.addNetworkById(req.body, function (err, rows) {
           if (!err) {
@@ -68,7 +68,7 @@ var userController = function () {
 
     var createGroup = function (req, res) {
       if(!req.body.name) {
-        res.status(400).json({ error: { message: 'Group name required', required: ['name']} });
+        res.status(400).json({ message: 'Group name required', required: ['name']});
       } else {
         userModel.createGroup(req.body, function (err, rows) {
           if (!err) {
@@ -84,7 +84,7 @@ var userController = function () {
     var createOrganization = function (req, res) {
       var test = checkRequiredFields(req.body, organizationRequiredFields);
       if(!test.valid) {
-        res.status(400).json({ error: { message: 'Missing fields required', required: test.fields} });
+        res.status(400).json({ message: 'Missing fields required', required: test.fields});
       } else {
         userModel.createOrganization(req.body, function (err, rows) {
           if (!err) {
@@ -100,7 +100,7 @@ var userController = function () {
     var createUser = function (req, res) {
       var test = checkRequiredFields(req.body, userRequiredFields);
       if(!test.valid) {
-        res.status(400).json({ error: { message: 'Missing fields required', required: test.fields} });
+        res.status(400).json({ message: 'Missing fields required', required: test.fields});
       } else {
         userModel.createUser(req.body, function (err, rows) {
           if (!err) {
@@ -115,17 +115,13 @@ var userController = function () {
 
     var getGroupById = function (req, res) {
       if(!req.params.id) {
-        res.status(400).json({ error: { message: 'Group Id required'}, required: ['id'] });
+        res.status(400).json({ message: 'Group Id required', required: ['id'] });
       } else {
         userModel.getGroupById(req.params.id, function (err, rows) {
           if (!err) {
-            if(rows.length > 0) {
-              res.status(200).json(rows);
-            } else {
-              res.status(404).json({ message: 'No Data' });
-            }
+            res.status(200).json(rows);
           } else {
-             res.status(err.code).json({ error: err });
+           res.status(err.code).json({ error: err });
           }
         });
       }
@@ -145,15 +141,11 @@ var userController = function () {
       });
     };
 
-    var getNetork = function (req, res) {
-      res.status(200).send(network);
-    };
-
-    var getNetworkByGroupId = function (req, res) {
-      if(!req.params.groupId) {
-        res.status(400).json({ error: { message: 'Group Id required'}, required: ['groupId'] });
+    var getGroupsByOrganizationId = function (req, res) {
+      if(!req.params.organizationId) {
+        res.status(400).json({ message: 'Organization Id required', required: ['organizationId'] });
       } else {
-        userModel.getNetworkByGroupId(req.params.groupId, function (err, rows) {
+        userModel.getGroupsByOrganizationId(req.params.organizationId, function (err, rows) {
           if (!err) {
             if(rows.length > 0) {
               res.status(200).json(rows);
@@ -162,6 +154,24 @@ var userController = function () {
             }
           } else {
              res.status(err.code).json({ error: err });
+          }
+        });
+      }
+    };
+
+    var getNetork = function (req, res) {
+      res.status(200).send(network);
+    };
+
+    var getNetworkByGroupId = function (req, res) {
+      if(!req.params.groupId) {
+        res.status(400).json({ message: 'Group Id required', required: ['groupId'] });
+      } else {
+        userModel.getNetworkByGroupId(req.params.groupId, function (err, rows) {
+          if (!err) {
+            res.status(200).json(rows);
+          } else {
+           res.status(err.code).json({ error: err });
           }
         });
       }
@@ -169,17 +179,13 @@ var userController = function () {
 
     var getNetworkByOrganizationId = function (req, res) {
       if(!req.params.organizationId) {
-        res.status(400).json({ error: { message: 'Organization Id required'}, required: ['organizationId'] });
+        res.status(400).json({ message: 'Organization Id required', required: ['organizationId'] });
       } else {
         userModel.getNetworkByOrganizationId(req.params.organizationId, function (err, rows) {
           if (!err) {
-            if(rows.length > 0) {
-              res.status(200).json(rows);
-            } else {
-              res.status(404).json({ message: 'No Data' });
-            }
+            res.status(200).json(rows);
           } else {
-             res.status(err.code).json({ error: err });
+           res.status(err.code).json({ error: err });
           }
         });
       }
@@ -187,17 +193,13 @@ var userController = function () {
 
     var getNetworkByUserId = function (req, res) {
       if(!req.params.userId) {
-        res.status(400).json({ error: { message: 'User Id required'}, required: ['userId'] });
+        res.status(400).json({ message: 'User Id required', required: ['userId'] });
       } else {
         userModel.getNetworkByUserId(req.params.userId, function (err, rows) {
           if (!err) {
-            if(rows.length > 0) {
-              res.status(200).json(rows);
-            } else {
-              res.status(404).json({ message: 'No Data' });
-            }
+            res.status(200).json(rows);
           } else {
-             res.status(err.code).json({ error: err });
+           res.status(err.code).json({ error: err });
           }
         });
       }
@@ -205,15 +207,11 @@ var userController = function () {
 
     var getOrganizationById = function (req, res) {
       if(!req.params.id) {
-        res.status(400).json({ error: { message: 'Organization Id required'}, required: ['id'] });
+        res.status(400).json({ message: 'Organization Id required', required: ['id'] });
       } else {
         userModel.getOrganizationById(req.params.id, function (err, rows) {
           if (!err) {
-            if(rows.length > 0) {
-              res.status(200).json(rows);
-            } else {
-              res.status(404).json({ message: 'No Data' });
-            }
+            res.status(200).json(rows);
           } else {
              res.status(err.code).json({ error: err });
           }
@@ -237,19 +235,42 @@ var userController = function () {
 
     var getUserById = function (req, res) {
       if(!req.params.id) {
-        res.status(400).json({ error: { message: 'User Id required', required: ['userId']}});
+        res.status(400).json({ message: 'User Id required', required: ['userId']});
       } else {
         userModel.getUserById(req.params.id, function (err, rows) {
-            if (!err) {
-                console.log(rows)
-                if(rows.length > 0) {
-                  res.status(200).json(rows);
-                } else {
-                  res.status(404).json({ message: 'No Data' });
-                }
-            } else {
-                res.status(500).json({ error: err });
-            }
+          if (!err) {
+            res.status(200).json(rows);
+          } else {
+            res.status(500).json({ error: err });
+          }
+        });
+      }
+    };
+
+    var getUsersByGroupId = function (req, res) {
+      if(!req.params.groupId) {
+        res.status(400).json({message: 'Group Id required', required: ['groupId']});
+      } else {
+        userModel.getUsersByGroupId(req.params.groupId, function (err, rows) {
+          if (!err) {
+            res.status(200).json(rows);
+          } else {
+            res.status(500).json({ error: err });
+          }
+        });
+      }
+    };
+
+    var getUsersByOrganizationId = function (req, res) {
+      if(!req.params.organizationId) {
+        res.status(400).json({ message: 'Organization Id required', required: ['organizationId']});
+      } else {
+        userModel.getUsersByOrganizationId(req.params.organizationId, function (err, rows) {
+          if (!err) {
+            res.status(200).json(rows);
+          } else {
+            res.status(500).json({ error: err });
+          }
         });
       }
     };
@@ -274,11 +295,11 @@ var userController = function () {
 
     var setUserLocation = function (req, res) {
       if(!req.body.id) {
-        res.status(400).json({ error: { message: 'User Id required', required: ['id']}});
+        res.status(400).json({ message: 'User Id required', required: ['id']});
       } else if(!req.body.lat) {
-        res.status(400).json({ error: { message: 'Latitude required', required: ['lat']} });
+        res.status(400).json({ message: 'Latitude required', required: ['lat']});
       } else if(!req.body.lng) {
-        res.status(400).json({ error: { message: 'Longitude required', required: ['lng']} });
+        res.status(400).json({ message: 'Longitude required', required: ['lng']});
       } else {
         userModel.setUserLocation(req.body.id, req.body.lat, req.body.lng, function (err, rows) {
           if (!err) {
@@ -296,11 +317,11 @@ var userController = function () {
 
     var setOrganizationLocation = function (req, res) {
       if(!req.body.id) {
-        res.status(400).json({ error: { message: 'Organization Id required', required: ['id']}});
+        res.status(400).json({ message: 'Organization Id required', required: ['id']});
       } else if(!req.body.lat) {
-        res.status(400).json({ error: { message: 'Latitude required', required: ['lat']} });
+        res.status(400).json({ message: 'Latitude required', required: ['lat']});
       } else if(!req.body.lng) {
-        res.status(400).json({ error: { message: 'Longitude required', required: ['lng']} });
+        res.status(400).json({ message: 'Longitude required', required: ['lng']});
       } else {
         userModel.setUserLocation(req.body.id, req.body.lat, req.body.lng, function (err, rows) {
           if (!err) {
@@ -332,6 +353,8 @@ var userController = function () {
         getOrganizations: getOrganizations,
         getUserById: getUserById,
         getUsers: getUsers,
+        getUsersByGroupId: getUsersByGroupId,
+        getUsersByOrganizationId: getUsersByOrganizationId,
         getVirginia: getVirginia,
         setOrganizationLocation: setOrganizationLocation,
         setUserLocation: setUserLocation

@@ -20,7 +20,8 @@ gulp.task('default', function () {
                 output: './pm2/logs/ramidx4-out.log',
                 error: './pm2/logs/ramidx4-error.log',
                 env: {
-                    PORT: process.env.PORT || 8000
+                    PORT: 80
+                    // PORT: process.env.PORT || 8000
                 }
             }, function (err) {
                 if (err) {

@@ -15,7 +15,7 @@ var routes = function () {
     userRouter.get('/network/userId/:userId', userController.getNetworkByUserId);
     userRouter.get('/network', userController.getNetwork); // TODO: change in dashboard
     userRouter.get('/organizations', userController.getOrganizations);
-    userRouter.get('/organization/:id', userController.getOrganizationById);
+    userRouter.get('/organization/organizationId/:id', userController.getOrganizationById);
     userRouter.get('/id/:id', userController.getUserById);
     userRouter.get('/virginia', userController.getVirginia);
     userRouter.get('/all', userController.getUsers);

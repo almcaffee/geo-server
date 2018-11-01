@@ -9,6 +9,7 @@ var config = function (mode) {
     var config = {};
 
     config.default = {
+         port: 8000,
          mysql: {
            connectionLimit : 25,
            host            : '34.219.189.208',
@@ -21,6 +22,7 @@ var config = function (mode) {
     };
 
     config.production = {
+        port: 80,
         mysql: {
           connectionLimit : 25,
           host            : 'localhost',
