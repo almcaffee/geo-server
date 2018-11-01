@@ -37,4 +37,4 @@ var config = function (mode) {
     return config[mode];
 };
 
-module.exports = config(process.env.mode || 'default');
+module.exports = config(process.env.NODE_ENV || 'default');
