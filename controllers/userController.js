@@ -38,7 +38,7 @@ var userController = function () {
              if(rows.length > 0) {
                res.status(200).json(rows);
              } else {
-               res.status(404).json({ error: { message: 'No Data'} });
+               res.status(404).json({ message: 'No Data' });
              }
           } else {
               res.status(500).json({ error: err });
@@ -57,7 +57,7 @@ var userController = function () {
             if(rows.length > 0) {
               res.status(200).json(rows);
             } else {
-              res.status(404).json({ error: { message: 'No Data'} });
+              res.status(404).json({ message: 'No Data' });
             }
           } else {
              res.status(err.code).json({ error: err });
@@ -122,7 +122,7 @@ var userController = function () {
             if(rows.length > 0) {
               res.status(200).json(rows);
             } else {
-              res.status(404).json({ error: { message: 'No Data'} });
+              res.status(404).json({ message: 'No Data' });
             }
           } else {
              res.status(err.code).json({ error: err });
@@ -137,7 +137,7 @@ var userController = function () {
           if(rows.length > 0) {
             res.status(200).json(rows);
           } else {
-            res.status(404).json({ error: { message: 'No Data'} });
+            res.status(404).json({ message: 'No Data' });
           }
         } else {
            res.status(err.code).json({ error: err });
@@ -158,7 +158,7 @@ var userController = function () {
             if(rows.length > 0) {
               res.status(200).json(rows);
             } else {
-              res.status(404).json({ error: { message: 'No Data'} });
+              res.status(404).json({ message: 'No Data' });
             }
           } else {
              res.status(err.code).json({ error: err });
@@ -176,7 +176,7 @@ var userController = function () {
             if(rows.length > 0) {
               res.status(200).json(rows);
             } else {
-              res.status(404).json({ error: { message: 'No Data'} });
+              res.status(404).json({ message: 'No Data' });
             }
           } else {
              res.status(err.code).json({ error: err });
@@ -194,7 +194,7 @@ var userController = function () {
             if(rows.length > 0) {
               res.status(200).json(rows);
             } else {
-              res.status(404).json({ error: { message: 'No Data'} });
+              res.status(404).json({ message: 'No Data' });
             }
           } else {
              res.status(err.code).json({ error: err });
@@ -212,7 +212,7 @@ var userController = function () {
             if(rows.length > 0) {
               res.status(200).json(rows);
             } else {
-              res.status(404).json({ error: { message: 'No Data'} });
+              res.status(404).json({ message: 'No Data' });
             }
           } else {
              res.status(err.code).json({ error: err });
@@ -227,7 +227,7 @@ var userController = function () {
           if(rows.length > 0) {
             res.status(200).json(rows);
           } else {
-            res.status(404).json({ error: { message: 'No Data'} });
+            res.status(404).json({ message: 'No Data' });
           }
         } else {
            res.status(err.code).json({ error: err });
@@ -245,7 +245,7 @@ var userController = function () {
                 if(rows.length > 0) {
                   res.status(200).json(rows);
                 } else {
-                  res.status(404).json({ error: { message: 'No Data'} });
+                  res.status(404).json({ message: 'No Data' });
                 }
             } else {
                 res.status(500).json({ error: err });
@@ -260,7 +260,7 @@ var userController = function () {
           if(rows.length > 0) {
             res.status(200).json(rows);
           } else {
-            res.status(404).json({ error: { message: 'No Data'} });
+            res.status(404).json({ message: 'No Data' });
           }
         } else {
            res.status(err.code).json({ error: err });
@@ -285,7 +285,7 @@ var userController = function () {
             if(rows.length > 0) {
               res.status(200).json(rows);
             } else {
-              res.status(404).json({ error: { message: 'No Data'} });
+              res.status(404).json({ message: 'No Data' });
             }
           } else {
              res.status(err.code).json({ error: err });
@@ -307,7 +307,7 @@ var userController = function () {
             if(rows.length > 0) {
               res.status(200).json(rows);
             } else {
-              res.status(404).json({ error: { message: 'No Data'} });
+              res.status(404).json({ message: 'No Data' });
             }
           } else {
              res.status(err.code).json({ error: err });

@@ -80,13 +80,14 @@ var userModel = function () {
             var keys = Object.keys(group);
             var insert = "INSERT INTO `group` (";
             keys.forEach((k, i)=> {
-              insert+= "`"+key+"`";
-              if(i<keys.length - 1) insert+= ",";
+              insert+= "`"+k+"`,";
+              // if(i<keys.length - 1) insert+= ",";
             });
             insert += "`createDate`) VALUES (";
             keys.forEach((k, i)=> {
-              insert+= connection.escape(user[k]);
-              if(i<keys.length - 1) insert+= ",";
+              insert+= connection.escape(group[k]);
+              insert+= ",";
+              // if(i<keys.length - 1) insert+= ",";
             });
             insert += " NOW())";
             console.log(insert);
@@ -195,7 +196,7 @@ var userModel = function () {
               callback({code: 500, message: "There was an error while connecting to the database", err: err});
           } else {
             // GROUP is reserved in sql use [schema].table for table with reserved word name
-            var select = "SELECT * FROM faciallock.group";
+            var select = "SELECT * FROM faciallock.group ORDER BY id asc";
             console.log(select);
             connection.query(select, function (err, rows) {
                 connection.release();
@@ -216,6 +217,7 @@ var userModel = function () {
               callback({code: 500, message: "There was an error while connecting to the database", err: err});
           } else {
             var select = "SELECT * FROM network WHERE userId ="+connection.escape(id);
+            select += " ORDER BY id asc";
             console.log(select);
             connection.query(select, function (err, rows) {
                 connection.release();
@@ -236,6 +238,7 @@ var userModel = function () {
               callback({code: 500, message: "There was an error while connecting to the database", err: err});
           } else {
             var select = "SELECT * FROM network WHERE groupId ="+connection.escape(id);
+            select += " ORDER BY id asc";
             console.log(select);
             connection.query(select, function (err, rows) {
                 connection.release();
@@ -256,6 +259,7 @@ var userModel = function () {
               callback({code: 500, message: "There was an error while connecting to the database", err: err});
           } else {
             var select = "SELECT * FROM network WHERE organizationId ="+connection.escape(id);
+            select += " ORDER BY id asc";
             console.log(select);
             connection.query(select, function (err, rows) {
                 connection.release();
@@ -295,7 +299,7 @@ var userModel = function () {
           if (err) {
               callback({code: 500, message: "There was an error while connecting to the database", err: err});
           } else {
-            var select = "SELECT * FROM organization";
+            var select = "SELECT * FROM organization ORDER BY id asc";
             console.log(select);
             connection.query(select, function (err, rows) {
                 connection.release();
@@ -315,7 +319,10 @@ var userModel = function () {
           if (err) {
               callback({code: 500, message: "There was an error while connecting to the database", err: err});
           } else {
-            var select = "SELECT * FROM user WHERE id ="+connection.escape(id);
+            var select = "SELECT u.*, IFNULL(g.displayName, g.name) AS groupName, g.id AS groupId, IFNULL(o.displayName, o.name) AS organizationName, o.id AS organizationId FROM user u";
+            select += "LEFT OUTER JOIN faciallock.group g ON g.id = u.groupId ";
+            select += "LEFT OUTER JOIN faciallock.organization o ON o.id = u.organizationId ";
+            select += "WHERE u.id ="+connection.escape(id);
             console.log(select);
             connection.query(select, function (err, rows) {
                 connection.release();
@@ -335,7 +342,10 @@ var userModel = function () {
           if (err) {
               callback({code: 500, message: "There was an error while connecting to the database", err: err});
           } else {
-            var select = "SELECT * FROM user";
+            var select = "SELECT u.*, IFNULL(g.displayName, g.name) AS groupName, g.id AS groupId, IFNULL(o.displayName, o.name) AS organizationName, o.id AS organizationId FROM user u ";
+            select += "LEFT OUTER JOIN faciallock.group g ON g.id = u.groupId ";
+            select += "LEFT OUTER JOIN faciallock.organization o ON o.id = u.organizationId ";
+            select += "ORDER BY u.id asc";
             console.log(select);
             connection.query(select, function (err, rows) {
                 connection.release();
