@@ -5,6 +5,7 @@ var pm2 = require('pm2');
 // Execute 'gulp' command
 gulp.task('default', function () {
     if (process.env.MODE === 'production') {
+        console.log(process.env)
         // Runs in production mode if the environment variable mode is set to production
         pm2.connect(function (err) {
             if (err) {
