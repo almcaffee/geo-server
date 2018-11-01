@@ -18,8 +18,9 @@ gulp.task('default', function () {
             pm2.start({
                 name: 'GeoServer',
                 script: 'app.js',
-                output: './pm2/logs/ramidx4-out.log',
-                error: './pm2/logs/ramidx4-error.log',
+                watch: true,
+                output: './pm2/logs/out.log',
+                error: './pm2/logs/error.log',
                 env: {
                     PORT: process.env.PORT || 80
                 }
