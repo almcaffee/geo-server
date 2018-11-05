@@ -358,7 +358,7 @@ var userModel = function () {
       getConnection(getUser);
     };
 
-    var getUsersByGroupId =  function(id, callback) {
+    var getUsersByGroupId =  function(id, userId, callback) {
       function getUsers(err, connection) {
           if (err) {
               callback({code: 500, message: "There was an error while connecting to the database", err: err});
@@ -366,7 +366,8 @@ var userModel = function () {
             var select = "SELECT u.*, IFNULL(g.displayName, g.name) AS groupName, g.id AS groupId, IFNULL(o.displayName, o.name) AS organizationName, o.id AS organizationId FROM user u";
             select += " LEFT OUTER JOIN faciallock.group g ON g.id = u.groupId";
             select += " LEFT OUTER JOIN faciallock.organization o ON o.id = u.organizationId";
-            select += " WHERE u.groupId ="+connection.escape(id);
+            select += " WHERE u.groupId = "+connection.escape(id);
+            if(userId) select += " AND u.id <> "+connection.escape(userId);
             console.log(select);
             connection.query(select, function (err, rows) {
                 connection.release();
@@ -381,7 +382,7 @@ var userModel = function () {
       getConnection(getUsers);
     };
 
-    var getUsersByOrganizationId =  function(id, callback) {
+    var getUsersByOrganizationId =  function(id, userId, callback) {
       function getUsers(err, connection) {
           if (err) {
               callback({code: 500, message: "There was an error while connecting to the database", err: err});
@@ -390,6 +391,7 @@ var userModel = function () {
             select += " LEFT OUTER JOIN faciallock.group g ON g.id = u.groupId";
             select += " LEFT OUTER JOIN faciallock.organization o ON o.id = u.organizationId";
             select += " WHERE u.organizationId ="+connection.escape(id);
+            if(userId) select += " AND u.id <> "+connection.escape(userId);
             console.log(select);
             connection.query(select, function (err, rows) {
                 connection.release();

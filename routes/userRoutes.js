@@ -10,12 +10,16 @@ var routes = function () {
     userRouter.get('/test', userController.test);
     userRouter.get('/groups', userController.getGroups);
     userRouter.get('/group/:id', userController.getGroupById);
+    userRouter.get('/groupId/:groupId', userController.getUsersByGroupId);
+    userRouter.get('/groupId/:groupId/userId/:userId', userController.getUsersByGroupId);
     userRouter.get('/network/groupId/:groupId', userController.getNetworkByGroupId);
     userRouter.get('/network/organizationId/:organizationId', userController.getNetworkByOrganizationId);
     userRouter.get('/network/userId/:userId', userController.getNetworkByUserId);
     userRouter.get('/network', userController.getNetwork); // TODO: change in dashboard
     userRouter.get('/organizations', userController.getOrganizations);
     userRouter.get('/organization/organizationId/:id', userController.getOrganizationById);
+    userRouter.get('/organizationId/:organizationId', userController.getUsersByOrganizationId);
+    userRouter.get('/organizationId/:organizationId/userId/:userId', userController.getUsersByOrganizationId);
     userRouter.get('/id/:id', userController.getUserById);
     userRouter.get('/virginia', userController.getVirginia);
     userRouter.get('/all', userController.getUsers);

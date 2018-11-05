@@ -206,6 +206,7 @@ var userController = function () {
     };
 
     var getOrganizationById = function (req, res) {
+      console.log('get org by id')
       if(!req.params.id) {
         res.status(400).json({ message: 'Organization Id required', required: ['id'] });
       } else {
@@ -251,11 +252,16 @@ var userController = function () {
       if(!req.params.groupId) {
         res.status(400).json({message: 'Group Id required', required: ['groupId']});
       } else {
-        userModel.getUsersByGroupId(req.params.groupId, function (err, rows) {
+        let userId = req.params.userId ? req.params.userId : null;
+        userModel.getUsersByGroupId(req.params.groupId, userId, function (err, rows) {
           if (!err) {
-            res.status(200).json(rows);
+            if(rows.length > 0) {
+              res.status(200).json(rows);
+            } else {
+              res.status(404).json({ message: 'No Data' });
+            }
           } else {
-            res.status(500).json({ error: err });
+             res.status(err.code).json({ error: err });
           }
         });
       }
@@ -265,11 +271,16 @@ var userController = function () {
       if(!req.params.organizationId) {
         res.status(400).json({ message: 'Organization Id required', required: ['organizationId']});
       } else {
-        userModel.getUsersByOrganizationId(req.params.organizationId, function (err, rows) {
+        let userId = req.params.userId ? req.params.userId : null;
+        userModel.getUsersByOrganizationId(req.params.organizationId, userId, function (err, rows) {
           if (!err) {
-            res.status(200).json(rows);
+            if(rows.length > 0) {
+              res.status(200).json(rows);
+            } else {
+              res.status(404).json({ message: 'No Data' });
+            }
           } else {
-            res.status(500).json({ error: err });
+             res.status(err.code).json({ error: err });
           }
         });
       }
