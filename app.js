@@ -44,12 +44,14 @@ app.use('/dashboard/*', express.static('dashboard'));
 // app.use('/dashboard', express.static('static/public/dashboard'));
 
 /* Define routers for API */
-var adminRouter = require('./routes/adminRoutes')();
+var groupRouter = require('./routes/groupRoutes')();
+var networkRouter = require('./routes/networkRoutes')();
+var organizationRouter = require('./routes/organizationRoutes')();
 var userRouter = require('./routes/userRoutes')();
-var commonRouter = require('./routes/commonRoutes')();
-app.use('/api/admin', adminRouter);
-app.use('/api/user', userRouter);
-app.use('/api/common', commonRouter);
+app.use('/api/groups', groupRouter);
+app.use('/api/networks', networkRouter);
+app.use('/api/organizations', organizationRouter);
+app.use('/api/users', userRouter);
 
 app.use(function (err, req, res, next) {
   if (err.name === 'UnauthorizedError') {

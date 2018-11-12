@@ -1,99 +1,391 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "Open Source Timesheet API",
+    "description": "Blue Sky API Docs",
     "version": "1.0.0",
-    "title": "Devsthetic Timesheet",
-    "termsOfService": "http://devsthetic.com/terms.cfm",
+    "title": "Blue Sky API",
+    "termsOfService": "",
     "contact": {
-      "email": "info@devsthetic.com"
+      "email": "ollie.tinsley@gmail.com"
     },
     "license": {
-      "name": "MIT",
-      "url": "https://opensource.org/licenses/MIT"
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
-  "host": "time.devsthetic.com",
-  "basePath": "/docs",
+  "host": "http://ec2-34-219-189-208.us-west-2.compute.amazonaws.com",
+  "basePath": "/api",
   "tags": [
     {
-      "name": "login",
-      "description": "Get user profile on login"
+      "name": "group",
+      "description": "Group Information"
     },
     {
-      "name": "profile",
-      "description": "Get user profile by admin/supervisor"
+      "name": "network",
+      "description": "Network of a user/group/organization"
     },
     {
-      "name": "timesheet",
-      "description": "Timesheet details"
+      "name": "organization",
+      "description": "Organization Information"
+    },
+    {
+      "name": "user",
+      "description": "User Information"
     }
   ],
   "schemes": [
     "http"
   ],
   "paths": {
-    "/login/user/{userId}/password/{password}": {
+    "/groups": {
       "get": {
         "tags": [
-          "login"
+          "group"
         ],
-        "summary": "Get profile by login criteria",
-        "operationId": "login",
+        "summary": "Get all groups",
+        "description": "",
+        "operationId": "getGroups",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Group"
+              }
+            }
+          },
+          "404": {
+            "description": "No groups exist"
+          },
+          "500": {
+            "description": "API connection error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "group"
+        ],
+        "summary": "Add a group",
+        "description": "",
+        "operationId": "createGroup",
+        "consumes": [
+          "application/json"
+        ],
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "name": "userId",
-            "in": "path",
-            "description": "User Id for timesheet user",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "password",
-            "in": "path",
-            "description": "Password for user",
-            "required": true,
-            "type": "string"
+            "in": "body",
+            "name": "group",
+            "description": "The group to create.",
+            "schema": {
+              "$ref": "#/definitions/Group"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "Login successful",
+            "description": "Group succesfully created",
             "schema": {
-              "$ref": "#/definitions/Profile"
+              "$ref": "#/definitions/Group"
             }
           },
           "400": {
-            "description": "Bad user id and password combination",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          },
-          "404": {
-            "description": "User not found",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
+            "description": "Group name required"
           },
           "500": {
-            "description": "Server error",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
+            "description": "API connection error"
           }
         }
       }
     },
-    "/profile/{userId}": {
+    "/groups/{id}": {
       "get": {
         "tags": [
-          "profile"
+          "group"
         ],
-        "summary": "Get profile by login criteria",
-        "operationId": "getProfile",
+        "summary": "Get group by id",
+        "operationId": "getGroupById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of group to return",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Group"
+            }
+          },
+          "400": {
+            "description": "Group id required",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "No group exists with id"
+          },
+          "500": {
+            "description": "API connection error"
+          }
+        }
+      }
+    },
+    "/groups/organization/{organizationId}": {
+      "get": {
+        "tags": [
+          "group"
+        ],
+        "summary": "Get groups by organization id",
+        "operationId": "getGroupsByOrganizationId",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "organizationId",
+            "in": "path",
+            "description": "ID of org to return",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Group"
+              }
+            }
+          },
+          "400": {
+            "description": "Organization id required",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "No groups exist for organization"
+          },
+          "500": {
+            "description": "API connection error"
+          }
+        }
+      }
+    },
+    "/organizations": {
+      "get": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Get all organizations",
+        "description": "",
+        "operationId": "getOrganizations",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Organization"
+              }
+            }
+          },
+          "404": {
+            "description": "No organizations exist"
+          },
+          "500": {
+            "description": "API connection error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Add an organization",
+        "description": "",
+        "operationId": "createOrganization",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "organization",
+            "description": "The organization to create.",
+            "schema": {
+              "$ref": "#/definitions/Organization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Organization succesfully created",
+            "schema": {
+              "$ref": "#/definitions/Organization"
+            }
+          },
+          "400": {
+            "description": "Missing required parameter",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "API connection error"
+          }
+        }
+      }
+    },
+    "/organizations/{id}": {
+      "get": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Get organization by id",
+        "operationId": "getOrganizationById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of organization to return",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Organization"
+            }
+          },
+          "400": {
+            "description": "Organization id required",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "No organization exists with id"
+          },
+          "500": {
+            "description": "API connection error"
+          }
+        }
+      }
+    },
+    "/organizations/location": {
+      "put": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Add map location for organization",
+        "operationId": "setOrganizationLocation",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Map cordinates to add to organization",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LocationCriteria"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Organization"
+            }
+          },
+          "400": {
+            "description": "Missing required parameter",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "No organization exists with id"
+          },
+          "500": {
+            "description": "API connection error"
+          }
+        }
+      }
+    },
+    "/network": {
+      "post": {
+        "tags": [
+          "network"
+        ],
+        "summary": "Add a network",
+        "description": "",
+        "operationId": "createNetwork",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "network",
+            "description": "The network to create.",
+            "schema": {
+              "$ref": "#/definitions/Network"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Network succesfully created"
+          },
+          "400": {
+            "description": "Network name required"
+          },
+          "500": {
+            "description": "API connection error"
+          }
+        }
+      }
+    },
+    "/network/user/{userId}": {
+      "get": {
+        "tags": [
+          "network"
+        ],
+        "summary": "Get network by user id",
+        "operationId": "getNetworkByUserId",
         "produces": [
           "application/json"
         ],
@@ -101,130 +393,562 @@
           {
             "name": "userId",
             "in": "path",
-            "description": "User Id for timesheet user",
-            "required": true,
-            "type": "string"
+            "description": "ID of user to return network",
+            "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "Login successful",
+            "description": "successful operation",
             "schema": {
-              "$ref": "#/definitions/Profile"
+              "$ref": "#/definitions/User"
             }
           },
           "400": {
-            "description": "Bad user id and password combination",
+            "description": "Network id required",
             "schema": {
-              "$ref": "#/definitions/ErrorResponse"
+              "$ref": "#/definitions/Error"
             }
           },
           "404": {
-            "description": "User not found",
+            "description": "No network exists with id"
+          },
+          "500": {
+            "description": "API connection error"
+          }
+        }
+      }
+    },
+    "/network/group/{groupId}": {
+      "get": {
+        "tags": [
+          "network"
+        ],
+        "summary": "Get network by group id",
+        "operationId": "getNetworkByGroupId",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "ID of org to return network",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
             "schema": {
-              "$ref": "#/definitions/ErrorResponse"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "400": {
+            "description": "Organization id required",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "No network exist for organization"
+          },
+          "500": {
+            "description": "API connection error"
+          }
+        }
+      }
+    },
+    "/network/organization/{organizationId}": {
+      "get": {
+        "tags": [
+          "network"
+        ],
+        "summary": "Get network by organization id",
+        "operationId": "getNetworkByOrganizationId",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "organizationId",
+            "in": "path",
+            "description": "ID of org to return network",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "400": {
+            "description": "Organization id required",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "No network exist for organization"
+          },
+          "500": {
+            "description": "API connection error"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get all users",
+        "description": "",
+        "operationId": "getUsers",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "404": {
+            "description": "No users exist"
+          },
+          "500": {
+            "description": "API connection error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Add an user",
+        "description": "",
+        "operationId": "createUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "user",
+            "description": "The user to create.",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User succesfully created",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Missing required parameter",
+            "schema": {
+              "$ref": "#/definitions/Error"
             }
           },
           "500": {
-            "description": "Server error",
+            "description": "API connection error"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get user by id",
+        "operationId": "getUserById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of user to return",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
             "schema": {
-              "$ref": "#/definitions/ErrorResponse"
+              "$ref": "#/definitions/User"
             }
+          },
+          "400": {
+            "description": "User id required",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "No user exists with id"
+          },
+          "500": {
+            "description": "API connection error"
+          }
+        }
+      }
+    },
+    "/users/group/{groupId}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get users by group",
+        "operationId": "getUserByGroupId",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "ID of group to return all users",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "400": {
+            "description": "Group id required",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "No users exist"
+          },
+          "500": {
+            "description": "API connection error"
+          }
+        }
+      }
+    },
+    "/users/organization/{organizationId}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get users by organization",
+        "operationId": "getUserByOrganizationId",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "organizationId",
+            "in": "path",
+            "description": "ID of org to return all users",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "400": {
+            "description": "Org id required",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "No users exists"
+          },
+          "500": {
+            "description": "API connection error"
+          }
+        }
+      }
+    },
+    "/users/location": {
+      "put": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Add map location for user",
+        "operationId": "setUserLocation",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Map cordinates to add to organization",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LocationCriteria"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Missing required parameter",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "No user exists with id"
+          },
+          "500": {
+            "description": "API connection error"
           }
         }
       }
     }
   },
   "definitions": {
-    "Day": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "day": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "moment": {
-          "type": "object"
-        },
-        "month": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "name": {
-          "type": "string",
-          "description": "Name of weekday"
-        },
-        "time": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "year": {
-          "type": "number",
-          "format": "int32"
-        }
-      }
-    },
     "Error": {
       "type": "object",
       "properties": {
         "message": {
-          "type": "string",
-          "description": "Error message returned from API"
+          "type": "string"
         },
         "required": {
           "type": "array",
-          "description": "Required fields/variables if any",
+          "items": {
+            "type": "string"
+          }
+        },
+        "optional": {
+          "type": "array",
           "items": {
             "type": "string"
           }
         }
       }
     },
-    "ErrorResponse": {
-      "type": "object",
-      "properties": {
-        "error": {
-          "$ref": "#/definitions/Error"
-        }
-      }
-    },
-    "Month": {
+    "Group": {
       "type": "object",
       "properties": {
         "id": {
-          "type": "integer",
-          "format": "int32"
+          "type": "number"
         },
         "name": {
-          "type": "string",
-          "description": "Name of the month"
+          "type": "string"
         },
-        "days": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Day"
-          }
+        "displayName": {
+          "type": "string"
         },
-        "year": {
-          "type": "integer",
-          "format": "int32"
+        "createDate": {
+          "type": "string"
+        },
+        "updateDate": {
+          "type": "string"
         }
       }
     },
-    "Profile": {
+    "LocationCriteria": {
       "type": "object",
       "properties": {
         "id": {
-          "type": "integer",
-          "format": "int64"
+          "type": "number"
         },
-        "departmentId": {
-          "type": "integer",
-          "format": "int32"
+        "lat": {
+          "type": "number"
+        },
+        "lng": {
+          "type": "number"
+        }
+      }
+    },
+    "Network": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "childId": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "groupId": {
+          "type": "number"
+        },
+        "organizationId": {
+          "type": "number"
+        },
+        "parentId": {
+          "type": "number"
+        },
+        "userId": {
+          "type": "number"
+        }
+      }
+    },
+    "Organization": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "address1": {
+          "type": "string"
+        },
+        "address2": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "createDate": {
+          "type": "string"
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "lat": {
+          "type": "number"
+        },
+        "lng": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "phoneExt": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "updateDate": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "zip": {
+          "type": "string"
+        }
+      }
+    },
+    "Pagination": {
+      "type": "object",
+      "properties": {
+        "currentPage": {
+          "type": "number"
+        },
+        "firstRecord": {
+          "type": "number"
+        },
+        "lastRecord": {
+          "type": "number"
+        },
+        "nextPage": {
+          "type": "number"
+        },
+        "numberPerPage": {
+          "type": "number"
+        },
+        "pages": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "previousPage": {
+          "type": "number"
+        },
+        "totalPages": {
+          "type": "number"
+        },
+        "viewOptions": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "SortCriteria": {
+      "type": "object",
+      "properties": {
+        "dir": {
+          "type": "string"
+        },
+        "col": {
+          "type": "string"
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "address1": {
+          "type": "string"
+        },
+        "address2": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "createDate": {
+          "type": "string"
+        },
+        "displayName": {
+          "type": "string"
         },
         "email": {
           "type": "string"
@@ -232,60 +956,62 @@
         "firstName": {
           "type": "string"
         },
-        "gender": {
-          "type": "string",
-          "enum": [
-            "m",
-            "f"
-          ]
-        },
-        "hireDate": {
+        "groupName": {
           "type": "string"
+        },
+        "groupId": {
+          "type": "number"
         },
         "lastName": {
           "type": "string"
         },
-        "locationId": {
-          "type": "integer",
-          "format": "int32"
+        "lat": {
+          "type": "number"
         },
-        "password": {
+        "lng": {
+          "type": "number"
+        },
+        "middleName": {
           "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "networkId": {
+          "type": "number"
+        },
+        "organizationName": {
+          "type": "string"
+        },
+        "organizationId": {
+          "type": "number"
         },
         "phone": {
           "type": "string"
         },
-        "personalComments": {
-          "type": "string",
-          "description": "Profile description of user"
+        "phoneExt": {
+          "type": "string"
         },
-        "roles": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [
-              "admin",
-              "supervisor",
-              "user"
-            ]
-          }
+        "state": {
+          "type": "string"
         },
-        "salary": {
-          "type": "integer",
-          "format": "int64"
+        "suffix": {
+          "type": "string"
         },
-        "supervisorId": {
-          "type": "integer",
-          "format": "int32"
+        "updateDate": {
+          "type": "string"
         },
-        "userName": {
+        "url": {
+          "type": "string"
+        },
+        "zip": {
           "type": "string"
         }
       }
     }
   },
   "externalDocs": {
-    "description": "Find out more about Devsthetic",
-    "url": "http://devsthetic.com"
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
   }
 }
