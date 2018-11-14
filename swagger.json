@@ -13,7 +13,7 @@
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
-  "host": "http://ec2-34-207-1-89.us-west-2.compute.amazonaws.com",
+  "host": "http://ec2-34-207-1-89.compute-1.amazonaws.com",
   "basePath": "/api",
   "tags": [
     {
