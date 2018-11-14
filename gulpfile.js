@@ -2,9 +2,10 @@ var gulp = require('gulp');
 var gulpNodemon = require('gulp-nodemon');
 var pm2 = require('pm2');
 
+var env = process.env.NODE_ENV;
 // Execute 'gulp' command
-gulp.task('default', function () {
-    if (process.env.NODE_ENV === 'production') {
+gulp.task(env, function () {
+    if (env === 'production') {
         // console.log(process.env)
         // Runs in production mode if the environment variable mode is set to production
         pm2.connect(function (err) {

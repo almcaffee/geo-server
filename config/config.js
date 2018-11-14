@@ -8,14 +8,22 @@
 var config = function (mode) {
     var config = {};
 
+    // TODO: When project resumes fix MySQL connection
     config.default = {
          port: 8000,
          mysql: {
+           // connectionLimit : 25,
+           // host            : '34.219.189.208',
+           // user            : 'api',
+           // password        : 'psT(EfIpd$$!PppVGC&KK=OXg(QSQMuA',
+           // database        : 'faciallock',
+           // acquireTimeout: 1000,
+           // debug: false
            connectionLimit : 25,
-           host            : '34.219.189.208',
+           host            : 'localhost',
            user            : 'api',
-           password        : 'psT(EfIpd$$!PppVGC&KK=OXg(QSQMuA',
-           database        : 'faciallock',
+           password        : 'f6DERsv*&VfhIu93Gbv%u)lNv?D5z6E%',
+           database        : 'api',
            acquireTimeout: 1000,
            debug: false
          }
