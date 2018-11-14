@@ -36,8 +36,9 @@ app.use(function (req, res, next) {
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/admin', express.static('admin'));
 app.use('/admin/*', express.static('admin'));
-app.use('/dashboard', express.static('dashboard'));
-app.use('/dashboard/*', express.static('dashboard'));
+// Dashboard disabled
+// app.use('/dashboard', express.static('dashboard'));
+// app.use('/dashboard/*', express.static('dashboard'));
 
 /* Unable to get node running in existing instance using seperate deploy folders*/
 // app.use('/admin', express.static('static/public/admin'));
