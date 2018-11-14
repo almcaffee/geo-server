@@ -2,6 +2,7 @@ export interface User {
   id?: number;
   firstName?: string;
   lastName?: string;
+  middleName?: string;
   suffix?: string;
   address1?: string;
   address2?: string;

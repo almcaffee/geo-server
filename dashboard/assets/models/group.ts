@@ -1,7 +1,7 @@
 export interface Group {
   id?: number;
-  name?: number;
-  displayName?: number;
+  name?: string;
+  displayName?: string;
   createDate?: string;
   updateDate?: string;
 }
