@@ -60,8 +60,8 @@ var userModel = function () {
               callback({code: 500, message: "There was an error while connecting to the database", err: err});
           } else {
             var select = "SELECT u.*, IFNULL(g.displayName, g.name) AS groupName, g.id AS groupId, IFNULL(o.displayName, o.name) AS organizationName, o.id AS organizationId FROM user u";
-            select += " LEFT OUTER JOIN faciallock.group g ON g.id = u.groupId";
-            select += " LEFT OUTER JOIN faciallock.organization o ON o.id = u.organizationId";
+            select += " LEFT OUTER JOIN api.group g ON g.id = u.groupId";
+            select += " LEFT OUTER JOIN api.organization o ON o.id = u.organizationId";
             select += " WHERE u.id = "+connection.escape(id);
             console.log(select);
             connection.query(select, function (err, rows) {
@@ -83,8 +83,8 @@ var userModel = function () {
               callback({code: 500, message: "There was an error while connecting to the database", err: err});
           } else {
             var select = "SELECT u.*, IFNULL(g.displayName, g.name) AS groupName, g.id AS groupId, IFNULL(o.displayName, o.name) AS organizationName, o.id AS organizationId FROM user u";
-            select += " LEFT OUTER JOIN faciallock.group g ON g.id = u.groupId";
-            select += " LEFT OUTER JOIN faciallock.organization o ON o.id = u.organizationId";
+            select += " LEFT OUTER JOIN api.group g ON g.id = u.groupId";
+            select += " LEFT OUTER JOIN api.organization o ON o.id = u.organizationId";
             select += " WHERE u.groupId = "+connection.escape(id);
             if(userId) select += " AND u.id <> "+connection.escape(userId);
             console.log(select);
@@ -107,8 +107,8 @@ var userModel = function () {
               callback({code: 500, message: "There was an error while connecting to the database", err: err});
           } else {
             var select = "SELECT u.*, IFNULL(g.displayName, g.name) AS groupName, g.id AS groupId, IFNULL(o.displayName, o.name) AS organizationName, o.id AS organizationId FROM user u";
-            select += " LEFT OUTER JOIN faciallock.group g ON g.id = u.groupId";
-            select += " LEFT OUTER JOIN faciallock.organization o ON o.id = u.organizationId";
+            select += " LEFT OUTER JOIN api.group g ON g.id = u.groupId";
+            select += " LEFT OUTER JOIN api.organization o ON o.id = u.organizationId";
             select += " WHERE u.organizationId = "+connection.escape(id);
             if(userId) select += " AND u.id <> "+connection.escape(userId);
             console.log(select);
@@ -131,8 +131,8 @@ var userModel = function () {
               callback({code: 500, message: "There was an error while connecting to the database", err: err});
           } else {
             var select = "SELECT u.*, IFNULL(g.displayName, g.name) AS groupName, g.id AS groupId, IFNULL(o.displayName, o.name) AS organizationName, o.id AS organizationId FROM user u ";
-            select += "LEFT OUTER JOIN faciallock.group g ON g.id = u.groupId ";
-            select += "LEFT OUTER JOIN faciallock.organization o ON o.id = u.organizationId ";
+            select += "LEFT OUTER JOIN api.group g ON g.id = u.groupId ";
+            select += "LEFT OUTER JOIN api.organization o ON o.id = u.organizationId ";
             select += "ORDER BY u.id asc";
             console.log(select);
             connection.query(select, function (err, rows) {

@@ -40,7 +40,7 @@ var groupModel = function () {
               callback({code: 500, message: "There was an error while connecting to the database", err: err});
           } else {
             // GROUP is reserved in sql use [schema].table for table with reserved word name
-            var select = "SELECT * FROM faciallock.group WHERE id = "+connection.escape(id);
+            var select = "SELECT * FROM api.group WHERE id = "+connection.escape(id);
             console.log(select);
             connection.query(select, function (err, rows) {
                 connection.release();
@@ -60,7 +60,7 @@ var groupModel = function () {
           if (err) {
               callback({code: 500, message: "There was an error while connecting to the database", err: err});
           } else {
-            var select = "SELECT * FROM faciallock.group WHERE organizationId = "+connection.escape(id);
+            var select = "SELECT * FROM api.group WHERE organizationId = "+connection.escape(id);
             select += " ORDER BY id asc";
             console.log(select);
             connection.query(select, function (err, rows) {
@@ -82,7 +82,7 @@ var groupModel = function () {
               callback({code: 500, message: "There was an error while connecting to the database", err: err});
           } else {
             // GROUP is reserved in sql use [schema].table for table with reserved word name
-            var select = "SELECT * FROM faciallock.group ORDER BY id asc";
+            var select = "SELECT * FROM api.group ORDER BY id asc";
             console.log(select);
             connection.query(select, function (err, rows) {
                 connection.release();

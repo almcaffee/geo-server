@@ -27,8 +27,8 @@ var config = function (mode) {
           connectionLimit : 25,
           host            : 'localhost',
           user            : 'api',
-          password        : 'psT(EfIpd$$!PppVGC&KK=OXg(QSQMuA',
-          database        : 'faciallock',
+          password        : 'f6DERsv*&VfhIu93Gbv%u)lNv?D5z6E%',
+          database        : 'api',
           acquireTimeout: 1000,
           debug: false
         }
