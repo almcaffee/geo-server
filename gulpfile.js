@@ -1,3 +1,4 @@
+require('dotenv').config();
 var gulp = require('gulp');
 var gulpNodemon = require('gulp-nodemon');
 var pm2 = require('pm2');
